@@ -6,10 +6,13 @@
 #include <limits.h>
 #include "rubix_cube.h"
 
-#define MAX_MOVES 20
-#define MAX_DEPTH 20
-#define MAX_THRESHOLD 6
+#define MAX_MOVES 13
+#define MAX_DEPTH 13
+#define MAX_THRESHOLD 4
 #define PRINT_REQ 0
+
+#define MIN_SHUF 1
+#define MAX_SHUF 2
 
 char ans_arr[19];
 int ans_len;
@@ -134,7 +137,7 @@ void customShuffle(RubiksCube *rc, int min_steps, int max_steps)
         int action = rand() % 3;
         int index = rand() % rc->n;
         int direction = rand() % 2;
-
+        int face = rand() % 6;
         switch (action)
         {
         case 0:
@@ -146,7 +149,6 @@ void customShuffle(RubiksCube *rc, int min_steps, int max_steps)
             vertical_twist(rc, index, direction);
             break;
         case 2:
-            int face = rand() % 6;
             printf("Side twist on side %d, direction %d\n", face, direction);
             side_twist(rc, face, direction);
             break;
@@ -160,7 +162,7 @@ int main()
     char colours[] = "ROYGBW";
     RubiksCube *cube = init_rubiks_cube(3, colours, NULL);
 
-    customShuffle(cube, 4, 4);
+    customShuffle(cube, MIN_SHUF, MAX_SHUF);
     printf("Shuffled cube :\n");
     visualize(cube);
 

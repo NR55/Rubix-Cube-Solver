@@ -7,10 +7,13 @@
 #include <omp.h>
 #include "rubix_cube.h"
 
-#define MAX_MOVES 20
-#define MAX_DEPTH 20
-#define MAX_THRESHOLD 6
+#define MAX_MOVES 13
+#define MAX_DEPTH 13
+#define MAX_THRESHOLD 4
 #define PRINT_REQ 0
+
+#define MIN_SHUF 1
+#define MAX_SHUF 2
 
 char ans_arr[19];
 int ans_len;
@@ -220,6 +223,7 @@ void customShuffle(RubiksCube *rc, int min_steps, int max_steps)
         int action = rand() % 3;
         int index = rand() % rc->n;
         int direction = rand() % 2;
+        int face = rand() % 6;
 
         switch (action)
         {
@@ -232,7 +236,6 @@ void customShuffle(RubiksCube *rc, int min_steps, int max_steps)
             vertical_twist(rc, index, direction);
             break;
         case 2:
-            int face = rand() % 6;
             printf("Side twist on side %d, direction %d\n", face, direction);
             side_twist(rc, face, direction);
             break;
@@ -246,7 +249,7 @@ int main()
     char colours[] = "ROYGBW";
     RubiksCube *cube = init_rubiks_cube(3, colours, NULL);
 
-    customShuffle(cube, 3, 3);
+    customShuffle(cube, MIN_SHUF, MAX_SHUF);
     printf("Shuffled cube :\n");
     visualize(cube);
 
@@ -257,14 +260,14 @@ int main()
 
     clock_t t;
     t = clock();
-    result = linear_solve(cube, 0, path, 0);
-    t = clock() - t;
+    // result = linear_solve(cube, 0, path, 0);
+    // t = clock() - t;
     double time_taken = ((double)t) / CLOCKS_PER_SEC; // in seconds
-    strcpy(path, ans_arr);
-    printf("Linear solution : %s\n",path);
-    printf("Linear took %f seconds to execute \n", time_taken);
+    // strcpy(path, ans_arr);
+    // printf("Linear solution : %s\n",path);
+    // printf("Linear took %f seconds to execute \n", time_taken);
 
-    printf("\n");
+    // printf("\n");
     t = clock();
     result = parallel_solve(cube, 0, path, 0);
     t = clock() - t;
